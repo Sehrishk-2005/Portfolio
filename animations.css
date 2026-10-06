@@ -1,0 +1,227 @@
+:root {
+  --fast: 0.25s;
+  --slow: 0.8s;
+}
+
+/* ---- 2. KEYFRAMES (animation ke "steps") ----
+   Har keyframe batata hai ke animation shuru mein kaisi dikhe
+   (from) aur akhir mein kaisi (to). */
+
+/* neeche se upar aate hue nazar aana */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(32px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* sirf halka sa nazar aana */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* upar neeche halka sa hilna (SK circle ke liye) */
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
+
+/* ---- 3. PAGE KHULTE HI (Hero section) ----
+   Pehle peeche ka naam aata hai, phir photo sticker "pop" hoti hai,
+   phir dono taraf ka content. animation-delay se ek ke baad ek aata hai. */
+.logo,
+.links {
+  animation: fadeIn var(--slow) ease both;
+}
+
+.big-name {
+  animation: fadeUp 1s ease both;
+  animation-delay: 0.1s;
+}
+.sticker {
+  animation: pop 0.9s cubic-bezier(0.2, 1.2, 0.4, 1) backwards;
+  animation-delay: 0.35s;
+}
+.hero-side {
+  animation: fadeUp var(--slow) ease both;
+  animation-delay: 0.6s;
+}
+.hero-side.right {
+  animation-delay: 0.75s;
+}
+
+/* photo sticker: pehle chhoti aur thori ghoomi hui, phir apni jagah par */
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: scale(0.8) rotate(-4deg);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) rotate(0);
+  }
+}
+
+/* mouse laane par sticker halka sa tilt hota hai */
+.sticker {
+  transition: transform var(--fast) ease;
+}
+.sticker:hover {
+  transform: rotate(-2deg) scale(1.02);
+}
+
+/* ---- 4. HOVER TRANSITIONS (mouse upar le jane par) ----
+   transition ka matlab: badlaav achanak nahi, narmi se ho. */
+
+/* buttons: halka upar uthte hain */
+.btn {
+  transition:
+    transform var(--fast) ease,
+    background var(--fast) ease,
+    border-color var(--fast) ease,
+    box-shadow var(--fast) ease;
+}
+.btn:hover {
+  transform: translateY(-3px);
+  text-decoration: none;
+  box-shadow: 0 8px 20px rgba(41, 28, 14, 0.25);
+}
+.btn.primary:hover {
+  background: var(--dark);
+}
+.btn.ghost:hover {
+  border-color: var(--brown);
+}
+
+/* cards: upar uthte hain aur shadow aati hai */
+.card {
+  transition:
+    transform var(--fast) ease,
+    box-shadow var(--fast) ease,
+    border-color var(--fast) ease;
+}
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 14px 30px rgba(41, 28, 14, 0.18);
+  border-color: var(--brown);
+}
+
+/* card ki image halka zoom hoti hai (zoom card ke andar hi rehta hai) */
+.shot {
+  overflow: hidden;
+}
+.shot img {
+  transition: transform 0.6s ease;
+}
+.card:hover .shot img {
+  transform: scale(1.06);
+}
+
+/* "View live site →" wale links: arrow ki jagah tak khisakta hai */
+.more {
+  transition:
+    letter-spacing var(--fast) ease,
+    color var(--fast) ease;
+}
+.more:hover {
+  letter-spacing: 0.5px;
+  text-decoration: none;
+  color: var(--dark);
+}
+
+/* navbar links: neeche se line barhti hai */
+.links a {
+  position: relative;
+  transition: color var(--fast) ease;
+}
+.links a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 8px;
+  width: 0;
+  height: 2px;
+  background: var(--brown);
+  transition: width var(--fast) ease;
+}
+.links a:hover {
+  text-decoration: none;
+}
+.links a:hover::after {
+  width: 100%;
+}
+
+/* logo hover par thoda bara */
+.logo {
+  display: inline-block;
+  transition: transform var(--fast) ease;
+}
+.logo:hover {
+  transform: scale(1.12);
+  text-decoration: none;
+}
+
+/* contact ke links */
+.contact a {
+  transition:
+    opacity var(--fast) ease,
+    transform var(--fast) ease;
+}
+.contact a:hover {
+  opacity: 0.8;
+  transform: translateX(6px);
+  text-decoration: none;
+}
+
+/* ---- 5. SCROLL PAR ANIMATION ----
+   Neeche scroll karne par sections aur cards screen mein aate hi
+   upar ko fade hote hain. Ye naye browsers (Chrome, Edge) mein chalta
+   hai; purane browser mein sab normal dikhta hai, kuch kharab nahi hota. */
+@keyframes reveal {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@supports (animation-timeline: view()) {
+  section h2,
+  .about .body,
+  .card,
+  .edu,
+  .contact .wrap > * {
+    animation: reveal linear backwards;
+    animation-timeline: view();
+    animation-range: entry 0% entry 35%;
+  }
+}
+
+/* ---- 6. SAFETY ----
+   Agar kisi ke phone/computer mein "reduce motion" on hai to
+   saari animation band ho jati hai (accessibility ke liye). */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
